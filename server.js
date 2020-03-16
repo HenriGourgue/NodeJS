@@ -21,7 +21,7 @@ app.get('/hello', function(req, res){
     }
 })
 
-app.post('/chat', function(req, res){
+/*app.post('/chat', function(req, res){
     if(req.body.msg != undefined){
         switch(req.body.msg){
             case 'ville':
@@ -35,9 +35,9 @@ app.post('/chat', function(req, res){
         }
     }
     console.log(req.body.msg);
-});
+});*/
 
-app.post('/chats', function(req, res){
+app.post('/chat', function(req, res){
     if(req.body.msg != undefined){
         var msg = req.body.msg
         var index = msg.indexOf('=')
