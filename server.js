@@ -1,10 +1,20 @@
+const express = require('express');
+const app = express();
 const PORT = process.env.PORT || 3000;
 
-var http = require('http');
+app.get('/', function (req, res) {
+    res.send('Hello World!')
+  })
 
-http.createServer(function (request, response) {
-    response.writeHead(200, {'Content-Type': 'text/plain'});
-    response.end('Hello World\n');
-}).listen(PORT);
+app.listen(PORT, function () {
+  console.log('Example app listening on port 3000!')
+})
 
-console.log('Server started');
+app.get('/hello', function(req, res){
+    var nom = req.query.nom;
+    if(nom=="" || nom==undefined){
+        res.send('Quel est votre nom ?\n')
+    } else {
+        res.send('Hello ' + nom + '!\n')
+    }
+})
