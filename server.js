@@ -41,11 +41,9 @@ app.post('/chat', function(req, res){
     if(req.body.msg != undefined){
         var msg = req.body.msg
         var index = msg.indexOf('=')
-        console.log(msg);
         if(msg.indexOf('=') == -1){
             fs.readFile("./reponses.json", (err, data) => {
-                console.log(data.length)
-                if(data.length == 0){
+                if(data == undefined){
                     res.send("Je ne connais pas " + msg + ".");
                 } else {
                     if (err) throw err;
