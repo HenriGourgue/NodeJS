@@ -5,7 +5,7 @@ const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
-const url = 'mongodb://localhost:27017/chat-bot';
+const url = process.env.MONGODB_URI || 'mongodb://localhost:' + 27017 + '/chat-bot';
 const client = new MongoClient(url, { useUnifiedTopology: true });
 const dbName = 'chat-bot';
 
@@ -13,47 +13,15 @@ const dbName = 'chat-bot';
     try {
       // Use connect method to connect to the Server
       await client.connect();
-      console.log('Connected to ' + dbName)
-
+      console.log("Connected to " + dbName)
     } catch (err) {
       console.log(err.stack);
     }
   
   })();
-
 app.listen(PORT, function () {
-  console.log('Example app listening on port 3000!')
+  console.log('Listening on port 3000!')
 })
-
-app.get('/', function (req, res) {
-    res.send('Hello World!')
-})
-
-app.get('/hello', function(req, res){
-    var nom = req.query.nom;
-    if(nom=="" || nom==undefined){
-        res.send('Quel est votre nom ?\n')
-    } else {
-        res.send('Hello ' + nom + '!\n')
-    }
-})
-
-/*app.post('/chat', function(req, res){
-    if(req.body.msg != undefined){
-        switch(req.body.msg){
-            case 'ville':
-                res.send('Nous sommes à Paris.\n')
-                break
-            case 'meteo':
-                res.send('Il fait beau.\n')
-                break
-            default:
-                break
-        }
-    }
-    console.log(req.body.msg);
-});*/
-
 app.post('/chat', function(req, res){
 
     const db = client.db(dbName)
@@ -64,12 +32,10 @@ app.post('/chat', function(req, res){
             col.insertOne({from:"user", msg:"ville"})
             col.insertOne({from:"chat-bot", msg:"Nous sommes à Paris."})
             return res.send('Nous sommes à Paris.\n')
-            break
         case 'meteo':
             col.insertOne({from:"user", msg:"meteo"})
             col.insertOne({from:"chat-bot", msg:"Il fait beau."})
             return res.send('Il fait beau.\n')
-            break
         default:
             break
     }
@@ -110,7 +76,6 @@ app.post('/chat', function(req, res){
         }
     }
 });
-
 app.get('/messages/all', function (req, res) {
 
     const db = client.db(dbName)
@@ -120,7 +85,6 @@ app.get('/messages/all', function (req, res) {
         return res.json(docs);
     });
 })
-
 app.delete('/messages/last', function (req, res) {
 
     const db = client.db(dbName)
